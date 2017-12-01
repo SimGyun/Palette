@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="./script.js"></script>
+    <script src="./clipboard.min.js"></script>
+    <link rel="stylesheet" href="./styles.css"></style>
+  </head>
+  <body>
+    <div>
+      <div class="tips">已复制</div>
+    </div>
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        let html = '';
+        let timer = null;
+        palette.forEach((p) => {
+          html += '<div class="lines">';
+          p.forEach((color) => {
+            html += `<div
+                      class="box"
+                      data-clipboard-text="${color}"
+                      style="background: ${color}">
+                    </div>`;
+          });
+          html += '</div>';
+        });
+
+        // document.querySelector('body').innerHTML = html;
+        const container = document.createElement('div');
+        container.innerHTML = html;
+        document.body.appendChild(container);
+
+        const clipboard = new Clipboard('.box');
+
+        clipboard.on('success', function (e) {
+          const color = e.text;
+          const tips = document.querySelector('.tips');
+          tips.className = 'tips move';
+          tips.style.background = color;
+          if (timer) {
+            clearTimeout(timer);
+          }
+          timer = setTimeout(() => {
+            tips.className = 'tips';            
+          }, 1000);
+        });
+      })
+    </script>
+  </body>
+</html>
